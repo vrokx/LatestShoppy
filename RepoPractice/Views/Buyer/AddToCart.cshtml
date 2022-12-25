@@ -1,0 +1,25 @@
+﻿@model RepoPractice.Models.ProductModel
+@{
+    ViewBag.Title = "Addtocart";
+}
+<br />
+<br />
+<br />
+<div style="background-color:lightcoral;">
+    @using (@Html.BeginForm())
+    {<div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <img style="min-height:200px; width:200px;" src="@Url.Content(Model.Image)" />
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                    <h1>Product Name: @Model.ProductName</h1>
+                    <h2>Price: @Model.Price PKR</h2>
+                    <input type="number" name="qty" value="0" id="qty1" min="1" max="10" />
+                    <input type="submit" value="Submit" class="btn btn-danger" />
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

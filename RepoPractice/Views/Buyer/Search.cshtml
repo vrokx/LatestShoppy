@@ -1,0 +1,51 @@
+﻿@model IEnumerable<RepoPractice.Models.ProductModel>
+
+<div id="carouselExampleIndicators" class="carousel slide mt-5 rounded-4 shadow" data-bs-ride="true">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner rounded-4">
+        <div class="carousel-item active">
+            <img src="~/Content/Image/carousel1.jpg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="~/Content/Image/carousel2.jpg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="~/Content/Image/carousel3.jpg" class="d-block w-100" alt="...">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="mt-lg-5">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="card shadow col-lg-3 m-4" style="width: 18rem;">
+                <img src="@Url.Content(item.Image)" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <lable>Product Name : </lable><h5 class="card-title">@Html.DisplayFor(modelItem => item.ProductName)</h5>
+                    <lable>Price : </lable><p class="card-text">@Html.DisplayFor(modelItem => item.Price)</p>
+                    <button class="btn btn-primary">@Html.ActionLink("Add To Cart", "AddToCart", new { id = item.ProductId }, new { @style = "text-decoration : none;color : white" })</button>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>
+
+@*@Html.ActionLink("Edit", "UpdateProducts", new { id = item.ProductId }) |
+    @Html.ActionLink("Details", "DisplayAllProducts", new { id = item.ProductId }) |
+    @Html.ActionLink("Delete", "DeleteProduct", new { id = item.ProductId })
+            </td>*@
+

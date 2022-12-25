@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "checkout";
+}
+
+
+
+<h2>ViewCart</h2>
+
+<table class="table table-responsive">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PRICE</th>
+            <th>QUANTITY</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+
+            <tr>
+                <td>@item.ProductModel_ProductId </td>*
+                <td>@item.productname</td>
+                <td>@item.price</td>
+                <td>@item.Quantity</td>
+                <td>@item.TotalAmount</td>
+                <td><a class="btn btn-danger btn-sm" href="@Url.Action("Remove", new { id = @item.CartId })">&#10060;</a></td>
+            </tr>
+
+        }
+
+
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="4"></td>
+            <td>@TempData["total"]</td>
+
+        </tr>
+    </tfoot>
+
+</table>
+<h2>Grand Total : @ViewBag.GrandTotal</h2>
+
+<button class="btn btn-outline-success">@Html.ActionLink("Buy Now", "Checkout", "Buyer")</button>
+<button class="btn btn-outline-success">@Html.ActionLink("Add More", "BuyerDisplayAllProduct", "Buyer")</button>

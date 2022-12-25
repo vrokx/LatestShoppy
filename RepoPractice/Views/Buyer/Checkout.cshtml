@@ -1,0 +1,12 @@
+﻿@model RepoPractice.Models.CartModel
+
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<h2>Checkout</h2>
+<div class="mt-5">
+    <button class="btn btn-outline-success">@Html.ActionLink("Update Profile", "UpdateProfile", "Buyer")</button>
+    <button class="btn btn-outline-success">@Html.ActionLink("Add Balance", "CreateWallet", "Buyer")</button>
+    <button class="btn btn-outline-success">@Html.ActionLink("Buy Now", "PaymentMode", "Buyer")</button>
+</div>

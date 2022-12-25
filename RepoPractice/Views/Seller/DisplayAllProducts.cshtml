@@ -1,0 +1,28 @@
+﻿@model IEnumerable<RepoPractice.Models.ProductModel>
+
+<div style="margin-top: 100px">
+    <button class="btn border-1 ">@Html.ActionLink("Add", "AddProduct")</button>
+    <br />
+    <br />
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="card shadow col-lg-3 m-4" style="width: 18rem;">
+                <img src="@Url.Content(item.Image)" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <lable>Product Name : </lable><h5 class="card-title">@Html.DisplayFor(modelItem => item.ProductName)</h5>
+                    <lable>Price : </lable><p class="card-text">@Html.DisplayFor(modelItem => item.Price)</p>
+                    <button class="btn btn-secondary">@Html.ActionLink("Edit", "UpdateProducts", new { id = item.ProductId }, new { @style = "text-decoration : none;color : white" })</button>
+                    <button class="btn btn-danger">@Html.ActionLink("Delete", "DeleteProduct", new { id = item.ProductId }, new { @style = "text-decoration : none;color : white" })</button>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>
+
+@*@Html.ActionLink("Edit", "UpdateProducts", new { id = item.ProductId }) |
+    @Html.ActionLink("Details", "DisplayAllProducts", new { id = item.ProductId }) |
+    @Html.ActionLink("Delete", "DeleteProduct", new { id = item.ProductId })
+            </td>*@
+

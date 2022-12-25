@@ -1,0 +1,79 @@
+﻿@model IEnumerable<RepoPractice.Models.ProductModel>
+
+<center>
+    <h2> Products </h2>
+</center>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+<div class="row mt-5">
+
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success" role="alert" style="font-size:large">
+                @TempData["msg"]
+            </div>
+
+        }
+        @if (TempData["total"] == null)
+        {
+
+            <h3>
+                Total Bill: 0 Rs
+            </h3>
+        }
+        else
+        {
+            <h3> Total Bill: @TempData["total"] Rs</h3>
+
+        }
+
+    </div>
+
+
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <h3 style="font-family:'Arial Rounded MT';text-align:center"> <span class="btn btn-warning">@Html.ActionLink("Check Out", "Checkout", "Buyer")</span></h3>
+    </div>
+
+
+
+
+</div>
+
+@*<div class="container">
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3">
+                <div class="card" style="width: 18rem;">
+                    <img style="min-height:200px;width:200px" src="@Url.Content(item.Image)">
+                    <div class="card-body">
+                        <p class="card-text"><h2>Brand</h2>@item.ProductName </p>
+                        <p class="card-text"><h2>Price</h2>@item.Price</p>
+                        <h4 style="color:#808080; font-family:'Arial Rounded MT';text-align:center"> <span class="btn btn-warning">@Html.ActionLink("Add To Cart", "Adtocart", new { id = @item.ProductId })</span></h4>
+                    </div>
+                </div>
+            </div>}
+
+    </div>
+
+
+</div>*@

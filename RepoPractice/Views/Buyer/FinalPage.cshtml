@@ -1,0 +1,15 @@
+﻿<div>
+    <div class="row" style="margin-top: 100px">
+        <div class="card shadow col-lg-3" style="width: 18rem;">
+            <div class="card-body">
+                <lable>Order ID : </lable><p class="card-title">@Session["lastOrderId"]</p>
+                <lable>Order Date : </lable><p class="card-text">@Session["lastOrderDate"]</p>
+                <lable>Mode Of Payment : </lable><p class="card-title">@Session["lastOrderPaymentMode"]</p>
+                <lable>Amount Paid : </lable><p class="card-text">@Session["lastOrderAmountPaid"]</p>
+            <button class="btn btn-outline-success">@Html.ActionLink("Send On Mail", "SendMail", "Buyer")</button>
+        </div>
+    </div>
+    <br />
+</div>
+</div>
+
