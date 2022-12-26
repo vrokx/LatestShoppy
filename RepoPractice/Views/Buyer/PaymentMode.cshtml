@@ -3,7 +3,7 @@
 <div style="margin-top:100px">
     @using (Html.BeginForm("OrderConfirmed", "Buyer", FormMethod.Post))
     {
-        <input type="radio" id="COD" name="ModeOfPayment" value="COD">
+        <input type="radio" id="COD" name="ModeOfPayment" value="COD" required>
         <label for="COD">COD</label><br>
         <input type="radio" id="Wallet" name="ModeOfPayment" value="Wallet">
         <label for="Wallet">Wallet</label><br>

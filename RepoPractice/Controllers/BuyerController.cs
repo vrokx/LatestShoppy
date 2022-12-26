@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Drawing.Drawing2D;
 using System.Web.UI.WebControls;
+using System.Data.Entity;
 
 namespace RepoPractice.Controllers
 {
@@ -33,15 +34,15 @@ namespace RepoPractice.Controllers
 
         public BuyerController()
         {
-                this.productObj = new GenericRepository<ProductModel>();
-                this.userObj = new GenericRepository<UserModel>();
-                this.cartObj = new GenericRepository<CartModel>();
-                this.orderObj = new GenericRepository<OrderModel>();
-                this.walletObj = new GenericRepository<WalletModel>();
+            this.productObj = new GenericRepository<ProductModel>();
+            this.userObj = new GenericRepository<UserModel>();
+            this.cartObj = new GenericRepository<CartModel>();
+            this.orderObj = new GenericRepository<OrderModel>();
+            this.walletObj = new GenericRepository<WalletModel>();
         }
 
         [Authorize]
-         public ActionResult Index()
+        public ActionResult Index()
         {
             try
             {
@@ -77,6 +78,7 @@ namespace RepoPractice.Controllers
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = nc;
                 smtp.Send(mm);
+
                 return RedirectToAction("BuyerDisplayAllProduct");
             }
             catch (Exception ex)
@@ -115,56 +117,56 @@ namespace RepoPractice.Controllers
         {
 
             ProductModel p = productObj.GetAllById(Convert.ToInt32(id));
-                return View(p);
-           
+            return View(p);
+
         }
         List<CartModel> li = new List<CartModel>();
         [HttpPost]
         public ActionResult AddToCart(/*ProductModel pi*/ string qty, int? Id)
         {
 
-                ProductModel po = productObj.GetAllById(Convert.ToInt32(Id));
-                CartModel co = new CartModel();
-                co.ProductModel_ProductId = po.ProductId;
-                co.productname = po.ProductName;
-                co.price = (int)po.Price;
-                co.Quantity = Convert.ToInt32(qty);
-                co.TotalAmount = co.price * co.Quantity;
+            ProductModel po = productObj.GetAllById(Convert.ToInt32(Id));
+            CartModel co = new CartModel();
+            co.ProductModel_ProductId = po.ProductId;
+            co.productname = po.ProductName;
+            co.price = (int)po.Price;
+            co.Quantity = Convert.ToInt32(qty);
+            co.TotalAmount = co.price * co.Quantity;
 
-                if (TempData["cart"] == null)
+            if (TempData["cart"] == null)
+            {
+                li.Add(co);
+                TempData["cart"] = li;
+            }
+            else
+            {
+                List<CartModel> li2 = TempData["cart"] as List<CartModel>;
+                int flag = 0;
+                foreach (var item in li2)
                 {
-                    li.Add(co);
-                    TempData["cart"] = li;
+                    if (item.CartId == co.ProductModel_ProductId)
+                    {
+                        item.Quantity = co.Quantity;
+                        item.TotalAmount = co.TotalAmount;
+                        flag = 1;
+                    }
                 }
-                else
+                if (flag == 0)
                 {
-                    List<CartModel> li2 = TempData["cart"] as List<CartModel>;
-                    int flag = 0;
-                    foreach (var item in li2)
-                    {
-                        if (item.CartId == co.ProductModel_ProductId)
-                        {
-                            item.Quantity = co.Quantity;
-                            item.TotalAmount = co.TotalAmount;
-                            flag = 1;
-                        }
-                    }
-                    if (flag == 0)
-                    {
-                        li2.Add(co);
-                    }
-
-                    TempData["cart"] = li2;
+                    li2.Add(co);
                 }
-                TempData.Keep();
 
-                cartObj.Add(co);
-                cartObj.Save();
+                TempData["cart"] = li2;
+            }
+            TempData.Keep();
 
-           
+            cartObj.Add(co);
+            cartObj.Save();
+
+
 
             return RedirectToAction("ViewCart");
-            
+
         }
         #endregion
 
@@ -203,7 +205,7 @@ namespace RepoPractice.Controllers
                 var cartId = (from x in cart select x.CartId).FirstOrDefault();
                 if (cartId != 0)
                 {
-                    
+
                     var GrandTotal = Convert.ToInt32((from x in cart select x.TotalAmount).Sum());
 
                     Session["GrandTotal"] = GrandTotal;
@@ -216,7 +218,7 @@ namespace RepoPractice.Controllers
                 {
                     return RedirectToAction("CartNull");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -394,12 +396,12 @@ namespace RepoPractice.Controllers
             Session["ModeOfPayment"] = ModeOfPayment;
 
             try
-            {   if(ModeOfPayment == "Wallet")
+            { if (ModeOfPayment == "Wallet")
                 {
                     var userId = (int)Session["UserId"];
 
                     List<WalletModel> wallet = walletObj.GetAll().ToList();
-                    var currentBalance = (from i in wallet where i.UserModel_UserId == userId  select i.CurrentBalance).ToList();
+                    var currentBalance = (from i in wallet where i.UserModel_UserId == userId select i.CurrentBalance).ToList();
 
                     if (currentBalance[0] >= (int)Session["GrandTotal"])
                     {
@@ -414,7 +416,7 @@ namespace RepoPractice.Controllers
                 {
                     return RedirectToAction("OrderDetails");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -423,6 +425,11 @@ namespace RepoPractice.Controllers
         }
         #endregion
 
+        #region
+        /// <summary>
+        /// Order Details
+        /// </summary>
+        /// <returns></returns>
         public ActionResult OrderDetails()
         {
             OrderModel order = new OrderModel();
@@ -433,6 +440,17 @@ namespace RepoPractice.Controllers
             if ((string)Session["ModeOfPayment"] == "COD")
             {
                 order.AmountPaid = 0;
+
+                List<CartModel> cart = cartObj.GetAll().ToList();
+                var cartId =  (from i in cart select i.CartId).ToList();
+                var length = cart.Count();
+
+                for(var i =0; i <cartId.Count; i++)
+                {
+                    var item = (int)cartId[i];
+                    cartObj.Delete(item);
+                }
+                cartObj.Save();
             }
             else
             {
@@ -445,13 +463,14 @@ namespace RepoPractice.Controllers
             orderObj.Save();
 
             return RedirectToAction("FinalPage");
-            
+
         }
+        #endregion
         public ActionResult FinalPage()
         {
             List<OrderModel> orders = orderObj.GetAll().ToList();
 
-           var lastOrder = orders.LastOrDefault();
+            var lastOrder = orders.LastOrDefault();
 
             Session["lastOrderId"] = lastOrder.OrderId;
             Session["lastOrderDate"] = lastOrder.OrderDate;
@@ -482,5 +501,6 @@ namespace RepoPractice.Controllers
         #endregion
 
     }
+
     #endregion
 }
