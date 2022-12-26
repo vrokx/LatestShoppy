@@ -6,15 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Net.Mail;
 using System.Net;
-using System.CodeDom;
-using System.Web.Http.Results;
-using System.Collections.ObjectModel;
-using System.Runtime.Remoting.Contexts;
-using System.Threading.Tasks;
-using System.Web.Helpers;
-using System.Drawing.Drawing2D;
 using System.Web.UI.WebControls;
-using System.Data.Entity;
 
 namespace RepoPractice.Controllers
 {
@@ -492,7 +484,7 @@ namespace RepoPractice.Controllers
                 var det = db.ProductSet.Where(d => d.ProductName.ToUpper().Contains(searchString.ToUpper())).ToList();
 
                 return View(det);
-            }
+            } 
             catch (Exception ex)
             {
                 return Content(ex.Message);
